@@ -126,6 +126,10 @@ export default {
                             required: true,
                             message: "请输入账单金额！",
                         },
+                        {
+                            pattern: /^\d+(\.\d{1,2})?$/,
+                            message: '请输入正确的账单金额，最多保留两位小数！',
+                        },
                     ],
                 },
             },

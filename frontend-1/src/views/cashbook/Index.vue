@@ -120,7 +120,7 @@
                     "
                     size="small"
                 >
-                    <div class="pie" id="in-out-total"></div>
+                    <div class="pie" id="in-out-total" ref="pie"></div>
                 </a-card>
             </a-col>
             <a-col :span="14">
@@ -132,7 +132,7 @@
                     "
                     size="small"
                 >
-                    <div class="bar" id="type-out-total"></div>
+                    <div class="bar" id="type-out-total" ref="bar"></div>
                 </a-card>
             </a-col>
         </a-row>
@@ -222,7 +222,7 @@ export default {
             typeArr: [],
             urls: {
                 list,
-                delete: del
+                delete: del,
             },
             pieChart: null,
             barChart: null,
@@ -276,9 +276,11 @@ export default {
             }).then((res) => {
                 if (res.code === 200) {
                     if (!this.pieChart) {
-                        this.pieChart = echarts.init(
-                            document.getElementById("in-out-total")
-                        );
+                        setTimeout(() => {
+                            this.pieChart = echarts.init(this.$refs.pie);
+                            this.setPieOption(res.data);
+                        }, 100);
+                        return;
                     }
                     this.setPieOption(res.data);
                 }
@@ -376,9 +378,11 @@ export default {
             }).then((res) => {
                 if (res.code === 200) {
                     if (!this.barChart) {
-                        this.barChart = echarts.init(
-                            document.getElementById("type-out-total")
-                        );
+                        setTimeout(() => {
+                            this.barChart = echarts.init(this.$refs.bar);
+                            this.setBarOption(res.data);
+                        }, 100);
+                        return;
                     }
                     this.setBarOption(res.data);
                 }
@@ -464,10 +468,10 @@ export default {
         onDelete(record) {
             this.getInOrOutTotalData();
             this.getCategoriesOutTotalData();
-            this.handleDelete(record.id)
-        }
+            this.handleDelete(record.id);
+        },
     },
-    created() {
+    mounted() {
         this.loadType();
         this.getInOrOutTotalData();
         this.getCategoriesOutTotalData();
