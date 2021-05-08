@@ -58,16 +58,16 @@ export const ListMixin = {
          * 获取列表数据
          * @method loadData
          * @for ListMixin
-         * @param {number}  page 页码
+         * @param {number}  pageNum 页码
          * @return {void} 
          */
-        loadData(page) {
+        loadData(pageNum) {
             if (!this.urls.list) {
                 this.$message.error("请设置urls.list属性!")
                 return
             }
             //加载数据 若传入参数1则加载第一页的内容
-            if (page === 200) {
+            if (pageNum === 1) {
                 this.pagination.current = 1;
             }
             let params = this.getQueryParams(); //查询条件
@@ -92,7 +92,7 @@ export const ListMixin = {
             //获取查询条件
             let param = Object.assign({}, this.params, this.sorter);
             param.field = this.getQueryField();
-            param.page = this.pagination.current;
+            param.pageNum = this.pagination.current;
             param.pageSize = param.pageSize || this.pagination.pageSize;
             return param;
         },
@@ -289,13 +289,11 @@ export const ListMixin = {
          */
         modalFormOk() {
             // 重载列表
-            if (this.modalStatus === 200) {
+            if (this.modalStatus === 1) {
                 this.loadData(1);
                 return;
             }
-            if (this.modalStatus !== 1) {
-                this.loadData();
-            }
+            this.loadData();
         },
     }
 
